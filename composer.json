@@ -20,7 +20,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Tuanbtre\\FormBuilder\\Providers\\FormBuilderServiceProvider"
+                "Tuanbtre\\FormBuilder\\FormBuilderServiceProvider"
             ]
         }
     }
