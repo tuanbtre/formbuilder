@@ -1,5 +1,5 @@
 {
-    "name": "tuanbtre/form-builder",
+    "name": "tuanbtre/formbuilder",
     "description": "A Laravel package for dynamic form creation and management",
     "type": "library",
     "license": "MIT",
@@ -15,13 +15,13 @@
     },
     "autoload": {
         "psr-4": {
-            "tuanbtre\\FormBuilder\\": "src/"
+            "Tuanbtre\\FormBuilder\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "tuanbtre\\FormBuilder\\Providers\\FormBuilderServiceProvider"
+                "Tuanbtre\\FormBuilder\\Providers\\FormBuilderServiceProvider"
             ]
         }
     }
