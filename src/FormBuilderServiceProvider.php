@@ -12,14 +12,14 @@ class FormBuilderServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
 
         // Đăng ký views
-        $this->loadViewsFrom(__DIR__ . '/Resources/views', 'form-builder');
+        $this->loadViewsFrom(__DIR__ . '/Resources/views', 'Form');
 
         // Đăng ký migrations
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
 
         // Publish views để tùy chỉnh
         $this->publishes([
-            __DIR__ . '/Resources/views' => resource_path('views/Admin/form-builder'),
+            __DIR__ . '/Resources/views' => resource_path('views/Admin'),
         ], 'form-builder-views');
 
         // Publish migrations để tùy chỉnh
