@@ -14,11 +14,11 @@ class InstallFormBuilder extends Command
     {
         $this->info('Installing FormBuilder...');
 		$this->info('copy FormController.php to Controller/Admin');
-		copy(__DIR__.'/../Http/Controllers/FormController.php', app_path('Http/Controllers/Admin/FormController.php'));
+		copy(__DIR__.'/../../Http/Controllers/FormController.php', app_path('Http/Controllers/Admin/FormController.php'));
 		$this->info('copy model Form.php to Model folder');
-		copy(__DIR__.'/../Models/Form.php', app_path('Models/Form.php'));
+		copy(__DIR__.'/../../Models/Form.php', app_path('Models/Form.php'));
 		$this->info('copy model FormSubmission.php to Model folder');
-		copy(__DIR__.'/../Models/FormSubmission.php', app_path('Models/FormSubmission.php'));
+		copy(__DIR__.'/../../Models/FormSubmission.php', app_path('Models/FormSubmission.php'));
         $this->info('add controller to route-admin');
 		DB::table('tbl_function')->insert([
 			[
