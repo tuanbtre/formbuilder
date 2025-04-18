@@ -37,7 +37,8 @@ class InstallFormBuilder extends Command
 				'parent_id' => 11,
 				'created_at' => now(),
 				'updated_at' => now()
-			]);
+			]
+		]);
 		// Publish migrations
 		$this->call('vendor:publish', [
             '--provider' => 'Tuanbtre\FormBuilder\FormBuilderServiceProvider',
