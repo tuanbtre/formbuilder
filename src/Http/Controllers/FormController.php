@@ -1,24 +1,54 @@
 <?php
 
-namespace Tuanbtre\FormBuilder\Http\Controllers;
+namespace App\Http\Controllers\Controller;
 
-use Tuanbtre\FormBuilder\Models\Form;
-use Tuanbtre\FormBuilder\Models\FormSubmission;
+use App\Http\Controllers\Controller;
+use App\Models\Form;
+use App\Models\FormSubmission;
+use App\Models\Language;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class FormController extends Controller
 {
-    public function index()
+    public function __construct()
+	{
+      $this->middleware('auth:admin');
+	}
+	public function index()
     {
-        $forms = Form::all();
-        return view('form-builder::forms.index', compact('forms'));
+        $language = Language::all();
+      $current_language = $request->l?? config('admin.lang', 2); //kiểm tra ngôn ngữ nếu ko có lấy default APP_LANG_ADMIN trong file env
+      $strsearch = $request->search;
+      if($request->isMethod('get')){
+         if($strsearch)
+            $list =Form::where([['language_id', $current_language], ['title', 'like', '%'.$strsearch.'%']])->orderBy('priority','desc')->paginate(15);  
+         else
+            $list =Form::where('language_id', $current_language)->orderBy('priority','desc')->paginate(15);  
+         return view('admin.form.index', compact('list','current_language', 'language'));
+      }elseif($request->deleteMode==1){//Xóa
+         $record = Form::find($request->Id);
+         $record->delete();
+         return redirect()->back()->with(['Flass_Message'=>'Xóa dữ liệu thành công']);
+      }else{
+         $this->validateform($request); // validate database
+         $priority = $request->priority==0? Form::where('language_id', $request->l)->max('priority')+1 : $request->priority;
+         $record = Form::updateOrCreate(
+            ['id'=>$request->Id],
+            ['title'=>$request->title,
+             'field'=>$re_name,
+             'priority'=>$priority,
+             'language_id'=>$request->l,
+             'isactive'=>($request->isactive==1)? 1 : 0
+            ]);             
+         return redirect()->back()->with(['Flass_Message'=>'Cập nhật dữ liệu thành công']);
+      }
     }
 
     public function create()
     {
-        return view('form-builder::forms.create');
+        return view('admin.forms.create');
     }
 
     public function store(Request $request)
@@ -40,7 +70,7 @@ class FormController extends Controller
             'end_time' => $request->end_time,
         ]);
 
-        return redirect()->route('form-builder.forms.index')->with('success', 'Form created successfully!');
+        return redirect()->route('admin.forms.index')->with('success', 'Form created successfully!');
     }
 
     public function showPublic()
@@ -51,7 +81,7 @@ class FormController extends Controller
             ->where('end_time', '>=', $now)
             ->first();
 
-        return view('form-builder::welcome', compact('form'));
+        return view('mainpage', compact('form'));
     }
 
     public function submit(Request $request, Form $form)

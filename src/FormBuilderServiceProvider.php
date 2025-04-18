@@ -9,10 +9,10 @@ class FormBuilderServiceProvider extends ServiceProvider
     public function boot()
     {
         // Đăng ký routes
-        $this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
+        //$this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
 
         // Đăng ký views
-        $this->loadViewsFrom(__DIR__ . '/Resources/views', 'Form');
+        $this->loadViewsFrom(__DIR__ . '/Resources/views', 'Formview');
 
         // Đăng ký migrations
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');

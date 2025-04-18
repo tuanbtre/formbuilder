@@ -12,9 +12,33 @@ class InstallFormBuilder extends Command
     public function handle()
     {
         $this->info('Installing FormBuilder...');
-
-        // Publish migrations
-        $this->call('vendor:publish', [
+		$this->info('copy FormController.php to Controller/Admin');
+		copy(__DIR__.'/../Http/Controllers/FormController.php', app_path('Http/Controllers/Admin/FormController.php'));
+		$this->info('copy model Form.php to Model folder');
+		copy(__DIR__.'/../Models/Form.php', app_path('Models/Form.php'));
+		$this->info('copy model FormSubmission.php to Model folder');
+		copy(__DIR__.'/../Models/FormSubmission.php', app_path('Models/FormSubmission.php'));
+        $this->info('add controller to route-admin');
+		DB::table('tbl_function')->insert([
+			[
+				'id' => 1115,
+				'icon' => null,
+				'url' => 'forms',
+				'controlleract' => 'FormController@index',
+				'method' => 'any',
+				'title_en' => 'Form manament',
+				'title_vn' => 'Quan ly Form',
+				'description' => null,
+				'function_tab' => 'Form manament',
+				'route_name' => 'admin.advertisement.index',
+				'can_grant' => 1,
+				'isshow' => 1,
+				'parent_id' => 11,
+				'created_at' => now(),
+				'updated_at' => now()
+			]);
+		// Publish migrations
+		$this->call('vendor:publish', [
             '--provider' => 'Tuanbtre\FormBuilder\FormBuilderServiceProvider',
             '--tag' => 'form-builder-migrations',
         ]);
