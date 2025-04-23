@@ -31,7 +31,7 @@ class InstallFormBuilder extends Command
 				'title_vn' => 'Quan ly Form',
 				'description' => null,
 				'function_tab' => 'Form manament',
-				'route_name' => 'admin.advertisement.index',
+				'route_name' => 'admin.form.index',
 				'can_grant' => 1,
 				'isshow' => 1,
 				'parent_id' => 11,

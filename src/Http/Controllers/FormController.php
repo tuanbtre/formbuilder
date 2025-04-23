@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Controller;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Form as FormModel;
@@ -16,7 +16,7 @@ class FormController extends Controller
 	{
       $this->middleware('auth:admin');
 	}
-	public function index()
+	public function index(Request $request)
     {
         $language = Language::all();
       $current_language = $request->l?? config('admin.lang', 2); //kiểm tra ngôn ngữ nếu ko có lấy default APP_LANG_ADMIN trong file env
@@ -26,7 +26,7 @@ class FormController extends Controller
             $list =FormModel::where([['language_id', $current_language], ['title', 'like', '%'.$strsearch.'%']])->orderBy('priority','desc')->paginate(15);  
          else
             $list =FormModel::where('language_id', $current_language)->orderBy('priority','desc')->paginate(15);  
-         return view('admin.form.index', compact('list','current_language', 'language'));
+         return view('admin.Forms.index', compact('list','current_language', 'language'));
       }elseif($request->deleteMode==1){//Xóa
          $record = FormModel::find($request->Id);
          $record->delete();
@@ -48,7 +48,7 @@ class FormController extends Controller
 
     public function create()
     {
-        return view('admin.forms.create');
+        return view('admin.Forms.create');
     }
 
     public function store(Request $request)
@@ -70,7 +70,7 @@ class FormController extends Controller
             'end_time' => $request->end_time,
         ]);
 
-        return redirect()->route('admin.forms.index')->with('success', 'Form created successfully!');
+        return redirect()->route('admin.Forms.index')->with('success', 'Form created successfully!');
     }
 
     public function showPublic()
