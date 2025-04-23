@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Controller;
-use App\Models\Form;
+use App\Models\Form as FormModel;
 use App\Models\FormSubmission;
 use App\Models\Language;
 use Carbon\Carbon;
@@ -23,18 +23,18 @@ class FormController extends Controller
       $strsearch = $request->search;
       if($request->isMethod('get')){
          if($strsearch)
-            $list =Form::where([['language_id', $current_language], ['title', 'like', '%'.$strsearch.'%']])->orderBy('priority','desc')->paginate(15);  
+            $list =FormModel::where([['language_id', $current_language], ['title', 'like', '%'.$strsearch.'%']])->orderBy('priority','desc')->paginate(15);  
          else
-            $list =Form::where('language_id', $current_language)->orderBy('priority','desc')->paginate(15);  
+            $list =FormModel::where('language_id', $current_language)->orderBy('priority','desc')->paginate(15);  
          return view('admin.form.index', compact('list','current_language', 'language'));
       }elseif($request->deleteMode==1){//Xóa
-         $record = Form::find($request->Id);
+         $record = FormModel::find($request->Id);
          $record->delete();
          return redirect()->back()->with(['Flass_Message'=>'Xóa dữ liệu thành công']);
       }else{
          $this->validateform($request); // validate database
-         $priority = $request->priority==0? Form::where('language_id', $request->l)->max('priority')+1 : $request->priority;
-         $record = Form::updateOrCreate(
+         $priority = $request->priority==0? FormModel::where('language_id', $request->l)->max('priority')+1 : $request->priority;
+         $record = FormModel::updateOrCreate(
             ['id'=>$request->Id],
             ['title'=>$request->title,
              'field'=>$re_name,
@@ -63,7 +63,7 @@ class FormController extends Controller
             'end_time' => 'required|date|after:start_time',
         ]);
 
-        Form::create([
+        FormModel::create([
             'title' => $request->title,
             'fields' => $request->fields,
             'start_time' => $request->start_time,
@@ -76,7 +76,7 @@ class FormController extends Controller
     public function showPublic()
     {
         $now = Carbon::now();
-        $form = Form::where('is_active', true)
+        $form = FormModel::where('is_active', true)
             ->where('start_time', '<=', $now)
             ->where('end_time', '>=', $now)
             ->first();
@@ -84,7 +84,7 @@ class FormController extends Controller
         return view('mainpage', compact('form'));
     }
 
-    public function submit(Request $request, Form $form)
+    public function submit(Request $request, FormModel $form)
     {
         $rules = [];
         foreach ($form->fields as $field) {
